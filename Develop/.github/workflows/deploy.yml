@@ -19,5 +19,13 @@ jobs:
         run: npm install
       - name: Build application
         run: npm run build
-      - name: Deploy
-        run: npm run deploy # Ensure you have a deploy script in your package.json
+      - name: Deploy to Render
+        env:
+          RENDER_API_KEY: 'rnd_GsAwOdJm5Ds6JiE94czMhzYqQaSf'
+        run: |
+          curl -X POST "https://api.render.com/v1/services/{service_id}/deploys" \
+          -H "Authorization: Bearer $RENDER_API_KEY" \
+          -H "Accept: application/json"
+      - name: Ensure MongoDB is up
+        run: |
+          mongo --eval 'db.runCommand({ connectionStatus: 1 })' # Adjust this based on your setup
